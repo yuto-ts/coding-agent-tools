@@ -1,14 +1,15 @@
-# claude-code-tools
+# coding-agent-tools
 
-Personal toolkit for [Claude Code](https://docs.claude.com/en/docs/claude-code).
-Each tool lives in its own directory so it can be installed independently and
-moved easily across machines.
+Personal toolkit for coding agents. Tools are grouped by agent first, then by
+tool name, so each piece can be installed independently and moved easily across
+machines.
 
 ## Tools
 
 | Directory | What it does |
 |---|---|
-| [`statusline/`](./statusline) | Status line script showing model name, context usage, and 5h / 7d rate-limit utilization |
+| [`claude-code/statusline/`](./claude-code/statusline) | Claude Code `statusLine` script showing model name, context usage, and 5h / 7d rate-limit utilization |
+| [`codex/statusline/`](./codex/statusline) | Codex usage/status script for tmux, starship, or manual `watch` usage |
 
 ## Conventions
 
