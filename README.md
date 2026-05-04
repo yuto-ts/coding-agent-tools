@@ -1,16 +1,17 @@
 # claude-code-tools
 
-[Claude Code](https://docs.claude.com/en/docs/claude-code) を快適に使うための自作ツール置き場です。
-PC を移行しても再利用しやすいよう、ツールごとに独立したディレクトリ構成にしています。
+Personal toolkit for [Claude Code](https://docs.claude.com/en/docs/claude-code).
+Each tool lives in its own directory so it can be installed independently and
+moved easily across machines.
 
-## ツール一覧
+## Tools
 
-| ディレクトリ | 概要 |
+| Directory | What it does |
 |---|---|
-| [`statusline/`](./statusline) | モデル名・コンテキスト使用率・5h / 7d レートリミット消費率を表示する statusline スクリプト |
+| [`statusline/`](./statusline) | Status line script showing model name, context usage, and 5h / 7d rate-limit utilization |
 
-## 方針
+## Conventions
 
-- 各ツールは自身のディレクトリ配下で完結させる（README + 必要なら `install.sh`）
-- 個人固有の設定値はリポジトリに含めない（環境変数・引数化する）
-- macOS / zsh を主ターゲット（他環境で動かすときはツール側 README を参照）
+- Every tool is self-contained: its own README and (when useful) `install.sh`.
+- No personal/secret values in the repo — make them env vars or arguments.
+- Primary target is macOS / zsh. Other platforms: see each tool's README.
