@@ -143,7 +143,7 @@ load_usage() {
     CURRENT_PCT=$(echo "$DATA" | jq -r '.five_hour.utilization // 0 | floor' 2>/dev/null || echo 0)
     WEEKLY_PCT=$(echo "$DATA" | jq -r '.seven_day.utilization // 0 | floor' 2>/dev/null || echo 0)
 
-    # Extra credits — API renamed extra → extra_usage; used_dollars → used_credits; total_dollars → monthly_limit
+    # Extra usage values are returned in cents even though currency is USD.
     EXTRA_USED_DOLLARS=$(echo "$DATA" | jq -r '.extra_usage.used_credits // empty' 2>/dev/null || echo "")
     EXTRA_TOTAL_DOLLARS=$(echo "$DATA" | jq -r '.extra_usage.monthly_limit // empty' 2>/dev/null || echo "")
 
@@ -218,8 +218,8 @@ if [ -n "$EXTRA_USED_DOLLARS" ] && [ -n "$EXTRA_TOTAL_DOLLARS" ]; then
   fi
   EX_COLOR=$(pick_color "$EXTRA_PCT")
   EX_BAR=$(dot_bar "$EXTRA_PCT" "$EX_COLOR")
-  USED_FMT=$(printf "\$%.2f" "$EXTRA_USED_DOLLARS" 2>/dev/null || echo "\$${EXTRA_USED_DOLLARS}")
-  TOTAL_FMT=$(printf "\$%.2f" "$EXTRA_TOTAL_DOLLARS" 2>/dev/null || echo "\$${EXTRA_TOTAL_DOLLARS}")
+  USED_FMT=$(awk -v cents="$EXTRA_USED_DOLLARS" 'BEGIN { printf "$%.2f", cents / 100 }')
+  TOTAL_FMT=$(awk -v cents="$EXTRA_TOTAL_DOLLARS" 'BEGIN { printf "$%.2f", cents / 100 }')
   LINE4="${GRAY}extra   ${RESET}${EX_BAR} ${WHITE}${USED_FMT}/${TOTAL_FMT}${RESET}"
 fi
 

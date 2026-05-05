@@ -54,13 +54,15 @@ well-behaved this script:
 
 ## API gotchas
 
-Two things that are not in the public docs and cost time to figure out:
+Three things that are not in the public docs and cost time to figure out:
 
 1. The endpoint requires the `anthropic-beta: oauth-2025-04-20` header.
    Without it the response is HTTP 401
    `OAuth authentication is currently not supported`.
 2. The `utilization` fields are returned as **0–100** values, not 0–1
    fractions.
+3. `extra_usage.used_credits` and `extra_usage.monthly_limit` are returned in
+   cents for `currency: "USD"`, so the display divides them by 100.
 
 ## Customization
 
@@ -76,5 +78,5 @@ Edit the constants at the top of `statusline-command.sh`:
 Opus 4.7 │ ✏️ 12% │ main │ ◑thinking
 current ●●●●○○○○○○ 45% ↺4:20am
 weekly  ●○○○○○○○○○ 17% ↺May 5, 8:00am
-extra   ○○○○○○○○○○ $0.00/$2000.00
+extra   ●●●●●●●○○○ $15.04/$20.00
 ```
