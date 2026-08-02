@@ -10,6 +10,7 @@ machines.
 |---|---|
 | [`claude-code/statusline/`](./claude-code/statusline) | Claude Code `statusLine` script showing model name, context usage, and 5h / 7d rate-limit utilization |
 | [`codex/statusline/`](./codex/statusline) | Codex usage/status script for tmux, starship, or manual `watch` usage |
+| [`runcat/`](./runcat) | launchd job writing Claude Code / Codex rate-limit usage as [RunCat Neo custom metrics](https://zenn.dev/kyome/articles/eb4a9f664002ad) |
 
 ## Conventions
 
