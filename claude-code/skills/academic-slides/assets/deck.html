@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>発表タイトル</title>
+<style>
+  /* ============================================================
+     デザインシステム
+     - 文字サイズは --fs-head / --fs-body / --fs-note の3段階のみ
+     - 色は白背景 + navy / sub / accent の3色のみ
+     新しい変数を足したくなったら references/design.md を読み直す
+     ============================================================ */
+  :root{
+    --navy:#1a2e4a;   /* ベース: 本文・タイトル帯 */
+    --sub:#dce6f1;    /* サブ: メッセージ帯・表ヘッダ */
+    --accent:#d95f02; /* アクセント: 1ページ1〜2箇所まで */
+    --line:#c9d4e2;
+
+    --fs-head:36px;   /* 見出し・強調する数値 */
+    --fs-body:24px;   /* 本文 */
+    --fs-note:16px;   /* 補足・キャプション・引用 */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  @page{size:1280px 720px;margin:0;}
+  @media print{
+    html,body{background:#fff;}
+    .slide{margin:0;box-shadow:none;}
+  }
+  html,body{background:#8a8a8a;}  /* 編集中にページ境界が見えるように */
+  body{
+    /* 英数字を先に置くことで、数字がCJKフォントに落ちるのを防ぐ */
+    font-family:"Helvetica Neue",Helvetica,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    color:var(--navy);
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  .slide{
+    position:relative;width:1280px;height:720px;background:#fff;
+    margin:0 auto 24px;overflow:hidden;
+    page-break-after:always;break-after:page;
+  }
+  .slide:last-child{page-break-after:auto;break-after:auto;}
+
+  /* ---- タイトル帯 ---- */
+  .bar{
+    height:76px;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;padding:0 40px;
+  }
+  .bar h2{font-size:var(--fs-head);font-weight:700;letter-spacing:.02em;}
+  .bar .pageno{font-size:var(--fs-note);opacity:.85;}
+  .bar.appendix{background:#4a5a6e;}  /* 補足スライドは色を落として区別 */
+
+  /* ---- 本文領域(四辺に安全マージン) ---- */
+  .body{
+    position:absolute;top:76px;left:0;right:0;bottom:0;
+    padding:24px 48px 64px;display:flex;flex-direction:column;
+  }
+  /* 内容の前後に置くと上下の余白が均等になり、中央寄せになる */
+  .grow{flex:1;min-height:0;}
+
+  /* ---- 文字 ---- */
+  .body,.body p,.body li,.body div{font-size:var(--fs-body);line-height:1.5;}
+  .note,.body .note,.body div.note{font-size:var(--fs-note);line-height:1.55;}
+  .body .cap,.body div.cap{font-size:var(--fs-note);}
+  .em{color:var(--accent);font-weight:700;}
+  .big{font-size:var(--fs-head);font-weight:700;}
+  ul{list-style:none;}
+  ul li{padding-left:1.2em;text-indent:-1.2em;margin-bottom:10px;}
+  ul li::before{content:"■";color:var(--navy);margin-right:.5em;font-size:.65em;vertical-align:.2em;}
+  /* 主文の下に補足を回すための指定。情報密度を上げる主な手段 */
+  ul li .note{display:block;text-indent:0;padding-left:0;color:rgba(26,46,74,.8);}
+
+  /* ---- 汎用部品 ---- */
+  .row{display:flex;gap:28px;align-items:flex-start;}
+  .row.center{align-items:center;}
+  .col{flex:1;min-width:0;}
+  .box{border:2px solid var(--navy);border-radius:8px;padding:14px 18px;}
+  .box.accent{border-color:var(--accent);}
+  .box.fill{background:var(--sub);border:none;}
+  .box.gray{background:#f2f4f7;border:2px solid var(--line);}
+  .box-t{font-weight:700;margin-bottom:6px;}
+  .msg{background:var(--sub);border-radius:6px;padding:12px 22px;text-align:center;font-weight:700;}
+  .cap{text-align:center;color:rgba(26,46,74,.75);margin-top:5px;}
+  .ref{position:absolute;right:48px;bottom:18px;font-size:var(--fs-note);
+       line-height:1.45;text-align:right;color:rgba(26,46,74,.7);}
+  img{display:block;max-width:100%;}
+  .arrow{color:var(--accent);font-weight:700;}
+
+  /* ---- タイトルスライド ---- */
+  .slide.cover{display:flex;flex-direction:column;justify-content:center;align-items:center;
+               text-align:center;padding:0 90px;}
+  .cover .kind{font-size:var(--fs-body);letter-spacing:.3em;color:rgba(26,46,74,.7);margin-bottom:26px;}
+  .cover h1{font-size:var(--fs-head);line-height:1.55;font-weight:700;}
+  .cover .rule{width:170px;height:4px;background:var(--accent);margin:32px 0 28px;}
+  .cover .who{font-size:var(--fs-body);line-height:1.9;}
+
+  /* ---- 図解: 横フロー ---- */
+  .flow{display:flex;align-items:stretch;justify-content:center;gap:14px;}
+  .flow .node{flex:1;text-align:center;border:2px solid var(--navy);border-radius:8px;
+              padding:14px 10px;font-weight:700;display:flex;flex-direction:column;justify-content:center;}
+  .flow .node.accent{border-color:var(--accent);background:#fdf3ea;}
+  .flow .ar{display:flex;align-items:center;font-size:var(--fs-head);color:var(--accent);font-weight:700;}
+
+  /* ---- 図解: 二者対立 ---- */
+  .dilemma{display:flex;align-items:stretch;gap:14px;}
+  .dilemma .side{flex:1;border:2px solid var(--navy);border-radius:8px;padding:12px 16px;text-align:center;}
+  .dilemma .vs{display:flex;align-items:center;font-weight:700;color:var(--accent);}
+
+  /* ---- 図解: 2×2 マトリクス ---- */
+  .matrix{display:grid;grid-template-columns:120px 1fr 1fr;grid-template-rows:48px 1fr 1fr;
+          gap:10px;height:100%;}
+  .matrix .h{display:flex;align-items:center;justify-content:center;font-weight:700;
+             background:var(--sub);border-radius:6px;text-align:center;}
+  .matrix .c{border:2px solid var(--line);border-radius:8px;padding:12px 16px;
+             display:flex;flex-direction:column;justify-content:center;gap:5px;}
+  .matrix .c.mine{border:3px solid var(--accent);background:#fdf3ea;align-items:center;text-align:center;}
+
+  /* ---- 図解: 横棒グラフ ---- */
+  .chart{display:flex;flex-direction:column;gap:20px;position:relative;padding-right:170px;}
+  .chart .brow{display:flex;align-items:center;gap:12px;}
+  .chart .blabel{width:150px;text-align:right;}
+  .chart .btrack{flex:1;height:44px;background:#eef2f7;border-radius:4px;position:relative;}
+  .chart .bfill{height:100%;background:var(--navy);border-radius:4px;}
+  .chart .bfill.accent{background:var(--accent);}
+  .chart .bval{position:absolute;left:calc(100% + 10px);top:9px;font-weight:700;white-space:nowrap;}
+  /* 基準線: left は blabel幅+gap を起点に、トラック幅の割合で置く */
+  .thr{position:absolute;top:0;bottom:0;border-left:3px dashed var(--accent);}
+
+  /* ---- 図解: Before / After ---- */
+  .cmp{display:flex;align-items:center;justify-content:center;gap:14px;}
+  .cmp .side{flex:1;text-align:center;}
+  .cmp .side img{margin:0 auto;}
+  .cmp .mid{font-size:var(--fs-head);color:var(--accent);font-weight:700;}
+
+  /* ---- 数式・表 ---- */
+  .eq{font-family:"Times New Roman",serif;font-style:italic;background:#f5f7fa;
+      border-left:5px solid var(--navy);padding:12px 18px;margin:8px 0;font-size:var(--fs-body);}
+  table{border-collapse:collapse;width:100%;font-size:var(--fs-body);}
+  th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:center;}
+  th{background:var(--sub);font-weight:700;}
+  td.l,th.l{text-align:left;}
+  .body .reflist li{margin-bottom:14px;font-size:var(--fs-note);padding-left:0;text-indent:0;}
+  .body .reflist li::before{content:none;}
+</style>
+</head>
+<body>
+
+<!-- ============ タイトル ============ -->
+<section class="slide cover">
+  <div class="kind">発表の種別</div>
+  <h1>発表タイトル<br>(2行に分けると収まりがよい)</h1>
+  <div class="rule"></div>
+  <div class="who">
+    氏名<br>
+    <span class="note">所属</span>
+  </div>
+</section>
+
+<!-- ============ 概要: 何をしたか・新規性・結果を1枚で ============ -->
+<section class="slide">
+  <div class="bar"><h2>研究概要</h2><span class="pageno">2</span></div>
+  <div class="body">
+    <div class="grow"></div>
+    <div class="flow" style="margin-bottom:20px;">
+      <div class="node">入力・対象<br><span class="note">補足</span></div>
+      <div class="ar">▶</div>
+      <div class="node">手法の要点<br><span class="note">補足</span></div>
+      <div class="ar">▶</div>
+      <div class="node accent">得られた結果</div>
+    </div>
+    <div class="row" style="gap:20px;">
+      <div class="col box">
+        <div class="box-t">取り組み</div>
+        何をしたか
+        <div class="note">対象・規模などの補足</div>
+      </div>
+      <div class="col box accent">
+        <div class="box-t">着眼点</div>
+        何が新しいか
+        <div class="note">従来との違いを一言で</div>
+      </div>
+      <div class="col box">
+        <div class="box-t">評価</div>
+        どう確かめたか
+        <div class="note">指標と試行回数</div>
+      </div>
+    </div>
+    <div class="grow"></div>
+    <div class="msg">主な結果を <span class="em">数値</span> で言い切る</div>
+  </div>
+</section>
+
+<!-- ============ 背景: 図 + 箇条書き(主文 + 補足) ============ -->
+<section class="slide">
+  <div class="bar"><h2>見出しはそのページの主張にする</h2><span class="pageno">3</span></div>
+  <div class="body">
+    <div class="grow"></div>
+    <div class="row">
+      <div class="col" style="flex:0 0 430px;">
+        <ul>
+          <li>主文は本文サイズ [1]
+            <span class="note">補足は注釈サイズ。密度を上げたいときはサイズを下げずにこの行を足す</span></li>
+          <li>主文2
+            <span class="note">補足2</span></li>
+        </ul>
+      </div>
+      <div class="col">
+        <img src="assets/figure.png" alt="図の説明" style="width:100%;">
+        <div class="cap">図のキャプション</div>
+      </div>
+    </div>
+    <div class="grow"></div>
+    <div class="msg">このページで持ち帰ってほしい一文</div>
+  </div>
+  <div class="ref">[1] A. Author et al., Conference, 2020.</div>
+</section>
+
+<!-- ============ 二者対立の図解 ============ -->
+<section class="slide">
+  <div class="bar"><h2>両立し得ないトレードオフ</h2><span class="pageno">4</span></div>
+  <div class="body">
+    <div class="grow"></div>
+    <div class="dilemma">
+      <div class="side"><b>選択肢A</b><br><span class="note">Aを取ると起きる問題</span></div>
+      <div class="vs">⇔</div>
+      <div class="side"><b>選択肢B</b><br><span class="note">Bを取ると起きる問題</span></div>
+    </div>
+    <div class="grow"></div>
+    <div class="msg">単純な調整では解けない<span class="em">ジレンマ</span></div>
+  </div>
+</section>
+
+<!-- ============ 2×2 マトリクスで立ち位置を示す ============ -->
+<section class="slide">
+  <div class="bar"><h2>「軸1 × 軸2」は未開拓</h2><span class="pageno">5</span></div>
+  <div class="body" style="padding-bottom:92px;">
+    <div class="matrix">
+      <div></div>
+      <div class="h">列の軸1</div>
+      <div class="h">列の軸2</div>
+
+      <div class="h">行の軸1</div>
+      <div class="c">
+        <div>該当する研究</div>
+        <div class="note">なぜ少ないのか</div>
+      </div>
+      <div class="c mine">
+        <div class="big em">本研究</div>
+        <div class="note">ここで何をするか</div>
+      </div>
+
+      <div class="h">行の軸2</div>
+      <div class="c">
+        <div>先行研究 [2]</div>
+        <div class="note">何をした研究か</div>
+      </div>
+      <div class="c">
+        <div>先行研究 [3]</div>
+        <div class="note">限界は何か</div>
+      </div>
+    </div>
+  </div>
+  <div class="ref">[2] B. Author et al., Journal, 2019.　[3] C. Author et al., Conference, 2021.</div>
+</section>
+
+<!-- ============ 横棒グラフ ============ -->
+<section class="slide">
+  <div class="bar"><h2>全対象で基準を上回る</h2><span class="pageno">6</span></div>
+  <div class="body">
+    <div class="grow"></div>
+    <div class="row">
+      <div class="col" style="flex:0 0 660px;">
+        <div class="chart">
+          <!-- 基準線: 162px = blabel(150) + gap(12) / 332px = 162 + padding-right(170) -->
+          <div class="thr" style="left:calc(162px + (100% - 332px) * 0.9);"></div>
+          <div class="brow"><div class="blabel">条件A</div>
+            <div class="btrack"><div class="bfill" style="width:100%;"></div><div class="bval">100%　20/20</div></div></div>
+          <div class="brow"><div class="blabel">条件B</div>
+            <div class="btrack"><div class="bfill accent" style="width:90%;"></div><div class="bval">90%　18/20</div></div></div>
+        </div>
+        <div class="note" style="margin-top:14px;padding-left:20px;">試行条件と判定基準をここに書く</div>
+      </div>
+      <div class="col">
+        <div class="box">
+          <div class="box-t">失敗の定義と発生状況</div>
+          <div style="margin-top:6px;">① 失敗の型1
+            <div class="note">発生状況</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grow"></div>
+    <div class="msg">結果の解釈を一文で</div>
+  </div>
+</section>
+
+<!-- ============ Before / After ============ -->
+<section class="slide">
+  <div class="bar"><h2>提案手法により指標を大幅に改善</h2><span class="pageno">7</span></div>
+  <div class="body">
+    <div class="grow"></div>
+    <div class="cmp">
+      <div class="side">
+        <img src="assets/before.png" style="width:90%;" alt="従来">
+        <div><b>従来</b>　<span class="big">158 mm</span></div>
+      </div>
+      <div class="mid">▶</div>
+      <div class="side">
+        <img src="assets/after.png" style="width:90%;" alt="提案">
+        <div><b>提案</b>　<span class="big em">53 mm</span></div>
+      </div>
+    </div>
+    <div class="grow"></div>
+    <div class="note" style="margin-bottom:10px;">計測条件・試行回数・外れ値の扱い</div>
+    <div class="msg">この差が何を意味するか</div>
+  </div>
+</section>
+
+<!-- ============ 補足スライド(質疑用) ============ -->
+<section class="slide">
+  <div class="bar appendix"><h2>補足:式の詳細</h2><span class="pageno">8</span></div>
+  <div class="body">
+    <div class="grow"></div>
+    <div class="row">
+      <div class="col">
+        <div class="note">制御則</div>
+        <div class="eq">y = f(x<sub>n</sub>) + g(x<sub>n-1</sub>)</div>
+        <div class="note">記号の定義と、式には書けない実装上の工夫</div>
+      </div>
+      <div class="col">
+        <img src="assets/graph.png" style="width:100%;" alt="グラフ">
+        <div class="cap">グラフの読み方</div>
+      </div>
+    </div>
+    <div class="grow"></div>
+  </div>
+</section>
+
+</body>
+</html>
