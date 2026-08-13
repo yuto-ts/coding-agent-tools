@@ -2,8 +2,8 @@
 # Symlink this slash command into a Claude Code commands directory.
 #
 # Usage:
-#   ./install.sh              # user-level: ~/.claude/commands/cleanup-worktree.md
-#   ./install.sh <repo-path>  # project-level: <repo-path>/.claude/commands/cleanup-worktree.md
+#   ./install.sh              # user-level: ~/.claude/commands/handoff.md
+#   ./install.sh <repo-path>  # project-level: <repo-path>/.claude/commands/handoff.md
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
