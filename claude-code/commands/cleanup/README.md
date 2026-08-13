@@ -1,4 +1,4 @@
-# cleanup-worktree
+# cleanup
 
 A Claude Code slash command for the "1 issue = 1 session = 1 worktree" workflow.
 After a branch is merged, it tears down what that worktree left behind: the
@@ -6,9 +6,9 @@ worktree itself, the local and remote branch, any dev server started for it, and
 finally fast-forwards `main`.
 
 ```
-/cleanup-worktree 11              # by issue number
-/cleanup-worktree feat/fairy      # by branch name
-/cleanup-worktree                 # the worktree you are currently in
+/cleanup 11              # by issue number
+/cleanup feat/fairy      # by branch name
+/cleanup                 # the worktree you are currently in
 ```
 
 The point of the command is the guardrails, not the git commands:
@@ -37,5 +37,5 @@ rather than assumed.
 ./install.sh /path/to/repo    # project-level: <repo>/.claude/commands/
 ```
 
-This symlinks `cleanup-worktree.md` into the chosen commands directory. Any
-existing file at the target is moved aside as `*.bak.<timestamp>`.
+This symlinks `cleanup.md` into the chosen commands directory. Any existing
+file at the target is moved aside as `*.bak.<timestamp>`.
