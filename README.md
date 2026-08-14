@@ -8,6 +8,7 @@ machines.
 
 | Directory | What it does |
 |---|---|
+| [`claude-code/claude-md/`](./claude-code/claude-md) | User-level `CLAUDE.md` with Japanese writing-style rules that remove the "AI tone": no punchline assertions, no boilerplate rhetoric, numbers instead of intensifiers, length matched to the question, explicit confidence levels |
 | [`claude-code/commands/cleanup/`](./claude-code/commands/cleanup) | Claude Code slash command for the 1 issue = 1 worktree workflow: tears down a merged branch's worktree, local/remote branch, and per-worktree resources, refusing to delete unmerged or uncommitted work |
 | [`claude-code/commands/handoff/`](./claude-code/commands/handoff) | Claude Code slash command that turns the current session into a self-contained prompt for pasting into a different session — another Claude Code session, the Claude app, or claude.ai |
 | [`claude-code/skills/academic-slides/`](./claude-code/skills/academic-slides) | Claude Code skill for building presentation decks from a paper: HTML as the source of truth, figure extraction from the source PDF, a CSS-enforced design system, mechanical layout verification, and PDF / Google Slides output |
