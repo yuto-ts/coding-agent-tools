@@ -25,7 +25,7 @@ substitution leaves the same problem in a different form.
 - **NG rules** (`rules.jsonl`) — regex matches, one rule per line. Every rule
   carries a `good` field: rewrite guidance ("こう書き直す") returned together
   with the match, so the agent knows what to write instead of just what to
-  avoid. Ships with 40 starter rules covering six categories: punchline
+  avoid. Ships with 44 starter rules covering six categories: punchline
   assertions, unrequested contrast, predicates that skip the actual effect,
   boilerplate openers/closers, intensifiers with no numbers behind them, and
   rhetorical clichés — see `rules.jsonl` for the concrete patterns, drawn from
