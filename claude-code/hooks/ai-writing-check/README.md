@@ -8,17 +8,37 @@ machine-checked counterpart to the prompt-side rules in
 
 ## How it works
 
-1. **PostToolUse** — after every `Write` / `Edit` / `MultiEdit`, the written
+1. **PreToolUse** — the first time a session touches a file, the violations
+   already in it are recorded as its baseline. Nothing is reported here.
+2. **PostToolUse** — after every `Write` / `Edit` / `MultiEdit`, the written
    file is matched against the NG rules in `rules.jsonl` plus document-level
-   checks. On a hit, the hook exits with code 2 and the warning goes back to
-   the agent, which rewrites and gets re-checked on the next write.
-2. **Stop** — when the session is about to end, every file edited in the
-   session (recovered from the transcript) is re-checked. Remaining violations
-   block completion until they are rewritten.
+   checks, and the baseline is subtracted. On a surplus hit, the hook exits
+   with code 2 and the warning goes back to the agent, which rewrites and gets
+   re-checked on the next write.
+3. **Stop** — when the session is about to end, every file edited in the
+   session (recovered from the transcript) is re-checked against its baseline.
+   Remaining surplus violations block completion until they are rewritten.
+   A second Stop pass is let through (`stop_hook_active`), so a violation the
+   agent cannot fix does not trap the session.
 
 The warning explicitly forbids swapping just the flagged word: the agent is
 told to rewrite the whole sentence containing the match, because word-level
 substitution leaves the same problem in a different form.
+
+### Scope: only what the session wrote
+
+Checking whole files makes the agent fix pre-existing prose it was never asked
+to touch. The baseline prevents that: violations are counted by fingerprint —
+`(rule id, matched text)`, deliberately excluding line numbers — and only
+counts above the baseline are reported. Editing line 3 of a document that
+already had five violations elsewhere reports nothing; adding a sixth reports
+exactly that one, even if the earlier ones shifted lines.
+
+Baselines live in `~/.cache/ai-writing-check/<session_id>.json`, are recorded
+once per file per session (so the agent's own output never becomes the
+baseline), are deleted when a session ends clean, and are pruned after 7 days.
+If the PreToolUse hook is not registered, the baseline is empty and every
+violation in the file is reported — the pre-baseline behavior.
 
 ### Checks
 
@@ -58,6 +78,12 @@ Registered hook entries:
 ```json
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [{ "type": "command", "command": "python3 \"$HOME/.claude/hooks/ai-writing-check/check.py\" --hook pre-tool-use" }]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",
@@ -118,5 +144,9 @@ Useful when testing new rules.
 - Regexes are matched per line; patterns spanning lines are not detected.
 - Metaphor-overuse detection (重ね使い) from the original workflow is not
   implemented.
-- The Stop gate re-checks any eligible file the session wrote, including
-  scratch drafts; add the off marker to drafts you don't want gated.
+- Baselines are per session. Reopening a file in a new session re-baselines it
+  against its current state, so violations left behind stay unreported.
+- Rewording an existing violation into a *different* NG phrase is reported as
+  new (the fingerprint changes), even though the sentence was already flagged.
+- Three Python processes now run per write (pre, post, and the Stop pass);
+  startup cost was not measured.

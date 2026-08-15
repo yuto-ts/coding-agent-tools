@@ -45,6 +45,10 @@ import json, os, shutil, sys, time
 
 settings_path = sys.argv[1]
 check = 'python3 "$HOME/.claude/hooks/ai-writing-check/check.py"'
+pre_entry = {
+    "matcher": "Write|Edit|MultiEdit",
+    "hooks": [{"type": "command", "command": f"{check} --hook pre-tool-use"}],
+}
 post_entry = {
     "matcher": "Write|Edit|MultiEdit",
     "hooks": [{"type": "command", "command": f"{check} --hook post-tool-use"}],
@@ -60,9 +64,15 @@ if os.path.isfile(settings_path):
 
 hooks = settings.setdefault("hooks", {})
 changed = False
-for event, entry in (("PostToolUse", post_entry), ("Stop", stop_entry)):
+for event, entry in (("PreToolUse", pre_entry),
+                     ("PostToolUse", post_entry),
+                     ("Stop", stop_entry)):
     entries = hooks.setdefault(event, [])
-    if "ai-writing-check" not in json.dumps(entries):
+    want = entry["hooks"][0]["command"]
+    # 既存コマンド文字列と直接比べる(json.dumps 経由だと引用符がエスケープされて一致しない)
+    registered = any(h.get("command") == want
+                     for e in entries for h in e.get("hooks", []))
+    if not registered:
         entries.append(entry)
         changed = True
 
