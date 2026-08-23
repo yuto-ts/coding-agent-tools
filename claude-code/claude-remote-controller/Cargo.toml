@@ -1,0 +1,15 @@
+[package]
+name = "claude-remote-controller"
+version = "0.1.0"
+edition = "2024"
+description = "Claude Code Remote Control (claude rc) をディレクトリ単位で管理する CLI"
+
+[[bin]]
+name = "claude-rc"
+path = "src/main.rs"
+
+[dependencies]
+crossterm = "0.29"
+
+[profile.release]
+strip = true
