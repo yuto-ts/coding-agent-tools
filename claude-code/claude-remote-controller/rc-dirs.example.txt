@@ -1,0 +1,6 @@
+# claude rc を自動起動するディレクトリ（1行1つ、# 以降はコメント）
+# remote-controller add / rm で編集できる。手で書いてもよい。
+# ~ は自分のホームに展開される。存在しないディレクトリは黙って飛ばす。
+~/prog
+# ~/prog/my-project
+# ~/research/my-paper
