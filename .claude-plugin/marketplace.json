@@ -1,0 +1,15 @@
+{
+  "name": "coding-agent-tools",
+  "owner": {
+    "name": "yuto-ts"
+  },
+  "description": "Personal Claude Code plugins from the coding-agent-tools toolkit.",
+  "plugins": [
+    {
+      "name": "eli5",
+      "source": "./claude-code/plugins/eli5",
+      "description": "Explain a topic to someone who knows nothing about it, as an HTML artifact of big pictures and few words. Replies in the language the question was asked in.",
+      "category": "learning"
+    }
+  ]
+}
