@@ -9,8 +9,8 @@ write, then shows one OK/NG pair for contrast:
 
 1. Judgements as full sentences with a subject and a predicate; conditions and
    grounds attached whenever the claim is generalized.
-2. The point stated directly — first sentence on topic, no contrast scaffolding
-   (「単なる〜ではない」), no closing pleasantries, each point made once.
+2. The point stated directly — first sentence on topic, no 単なる〜 contrast
+   scaffolding, no closing pleasantries, each point made once.
 3. Degree expressed as measurements, counts, and sources; when nothing was
    measured, that fact is written instead of an adjective.
 4. Length and structure matched to the question — 1–3 sentences for yes/no,
@@ -22,8 +22,11 @@ The exhaustive list of NG expressions lives in
 [`../hooks/ai-writing-check/rules.jsonl`](../hooks/ai-writing-check), not here.
 The hook matches it line by line on every write and returns rewrite guidance,
 so the always-loaded memory file stays a set of positive rules. `CLAUDE.md`
-carries `<!-- ai-writing-check: off -->` because its own NG examples would
-otherwise trip the hook.
+carries the hook's opt-out marker in an HTML comment on its first line —
+see [Opting a file out](../hooks/ai-writing-check#opting-a-file-out) — because
+its own NG examples would otherwise trip the hook. That marker exempts a file
+from anywhere in its contents, so this README points at it rather than
+spelling it out.
 
 ## Install
 
