@@ -25,11 +25,20 @@ substitution leaves the same problem in a different form.
 - **NG rules** (`rules.jsonl`) — regex matches, one rule per line. Every rule
   carries a `good` field: rewrite guidance ("こう書き直す") returned together
   with the match, so the agent knows what to write instead of just what to
-  avoid. Ships with 44 starter rules covering six categories: punchline
+  avoid. Ships with 47 starter rules covering seven categories: punchline
   assertions, unrequested contrast, predicates that skip the actual effect,
-  boilerplate openers/closers, intensifiers with no numbers behind them, and
-  rhetorical clichés — see `rules.jsonl` for the concrete patterns, drawn from
-  the rules in [`claude-code/claude-md/`](../../claude-md).
+  boilerplate openers/closers, intensifiers with no numbers behind them,
+  rhetorical clichés, and instruction leakage — see `rules.jsonl` for the
+  concrete patterns, drawn from the rules in
+  [`claude-code/claude-md/`](../../claude-md).
+
+  Instruction leakage is a different failure from the rest. When a prompt says
+  "don't consider X", the artifact tends to come back saying「X は検討しない。
+  理由は…」— the negated instruction is transcribed into the deliverable
+  instead of being applied to it. Suppressing that at generation time is
+  unreliable ([arXiv:2511.12381](https://arxiv.org/abs/2511.12381)), so these
+  rules catch it after the write, where naming the forbidden shape costs
+  nothing.
 - **Sentence-ending runs** — the same polite ending (ます/です/ました…)
   repeated for 3+ consecutive sentences. This can't be caught per-sentence;
   the script counts endings across the document.
