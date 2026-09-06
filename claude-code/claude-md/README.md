@@ -1,10 +1,11 @@
 # claude-md
 
 User-level `CLAUDE.md` — Japanese writing-style rules that strip the "AI tone"
-out of Claude Code's responses. Claude Code loads `~/.claude/CLAUDE.md` in every
-session, so these rules apply across all projects.
+out of Claude Code's responses, plus a short file-editing rule. Claude Code
+loads `~/.claude/CLAUDE.md` in every session, so these rules apply across all
+projects.
 
-The file covers five rules plus a short catch-all:
+The writing-style section covers five rules plus a short catch-all:
 
 1. No punchline-style assertions (体言止めの言い切り) or ungrounded
    generalizations (「常に」「必ず」).
@@ -16,6 +17,11 @@ The file covers five rules plus a short catch-all:
    headings and bullets only when there are actually 3+ parallel items.
 5. Confidence stated explicitly: verified vs. read-in-the-code vs. guessed vs.
    unknown, rather than one uniform assertive tone.
+
+A separate `# ファイル編集` section asks for surgical edits over whole-file
+rewrites when the result is the same. Claude Fable 5.1 rewrites entire files
+more readily than its predecessor, which costs output tokens and time without
+changing the outcome.
 
 ## Install
 
