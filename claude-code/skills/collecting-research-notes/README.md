@@ -19,8 +19,9 @@ Key disciplines baked into the skill:
 - Optional three-level glossary support (light inline glosses, a `## 用語`
   section, or full background explanations) triggered by requests like
   「用語解説つけて」 or 「レベル2で」.
-- Lightweight WebSearch/WebFetch flow by default; the deep-research skill is
-  only brought in for large surveys.
+- Lightweight WebSearch/WebFetch flow by default; collection is delegated to
+  sub-agents only for large surveys, which also keeps execution tools out of
+  the fetching phase.
 
 See [`SKILL.md`](./SKILL.md) for the full skill definition.
 
