@@ -16,8 +16,8 @@ community plugin (a three-line prompt) and differs from it in four ways:
   translated into a paraphrase.
 - **Picks a diagram type before drawing.** Six types (flow, cutaway,
   before/after, analogy, exploded view, quantity comparison) with a stated use
-  case for each. A screen that fits none of them is a screen holding two ideas
-  at once.
+  case for each, as the common starting set rather than a closed menu. A screen
+  no diagram fits at all is a screen holding two ideas at once.
 - **Caps the budget per screen.** One idea, a heading of 12 Japanese
   characters or 6 English words, two sentences, one diagram, six labels inside
   it. Over budget means splitting the screen, not shrinking the prose.

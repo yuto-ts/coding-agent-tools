@@ -1,11 +1,12 @@
 # claude-md
 
 User-level `CLAUDE.md` — Japanese writing-style rules that strip the "AI tone"
-out of Claude Code's responses. Claude Code loads `~/.claude/CLAUDE.md` in every
-session, so these rules apply across all projects.
+out of Claude Code's responses, plus a short file-editing rule. Claude Code
+loads `~/.claude/CLAUDE.md` in every session, so these rules apply across all
+projects.
 
-The file covers five rules plus a short catch-all. Each one states what to
-write, then shows one OK/NG pair for contrast:
+The writing-style section covers five rules plus a short catch-all. Each one
+states what to write, then shows one OK/NG pair for contrast:
 
 1. Judgements as full sentences with a subject and a predicate; conditions and
    grounds attached whenever the claim is generalized.
@@ -27,6 +28,11 @@ see [Opting a file out](../hooks/ai-writing-check#opting-a-file-out) — because
 its own NG examples would otherwise trip the hook. That marker exempts a file
 from anywhere in its contents, so this README points at it rather than
 spelling it out.
+
+A separate `# ファイル編集` section asks for surgical edits over whole-file
+rewrites when the result is the same. Claude Fable 5.1 rewrites entire files
+more readily than its predecessor, which costs output tokens and time without
+changing the outcome.
 
 ## Install
 
